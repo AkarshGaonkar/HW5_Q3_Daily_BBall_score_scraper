@@ -5,6 +5,8 @@ on:
   schedule:
     - cron: '0 17 * * *' # scheduled run (daily at noon EST == 5pm UTC)
 
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -28,10 +30,8 @@ jobs:
       - name: Run KenPom daily script
         run: Rscript HW5_Q3.R
 
-      - name: Commit and push changes
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/kenpom_daily_summary.csv
-          git commit -m "Update KenPom daily summary"
-          git push
+      - name: Commit updates
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update Kenpom Bball daily?
+          branch: main
