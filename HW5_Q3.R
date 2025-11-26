@@ -33,6 +33,16 @@ parse_game <- function(line) {
 games <- map_df(raw_lines, parse_game) %>%
   drop_na(away_points, home_points)
 
+daily_summary <- games %>%
+  group_by(date) %>%
+  summarise(
+    total_away_points = sum(away_points, na.rm = TRUE),
+    total_home_points = sum(home_points, na.rm = TRUE),
+    num_games = n(),
+    avg_points_per_game = (total_away_points + total_home_points) / num_games,
+    .groups = "drop"
+  )
+
 # Daily summary calculation
 daily_summary <- daily_summary %>% 
   mutate(
