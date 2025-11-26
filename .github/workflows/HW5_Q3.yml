@@ -1,0 +1,31 @@
+name: Daily KenPom Summary
+
+on:
+  schedule:
+    # Runs every day at 17:00 UTC, which is 12:00 PM (noon) EST
+    - cron: '0 17 * * *' # minutes(0) hours(17) daily
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+
+      - name: Install R packages
+        run: Rscript -e "install.packages(c('tidyverse', 'stringr'))"
+
+      - name: Run KenPom daily script
+        run: Rscript HW5_Q3.R
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/kenpom_daily_summary.csv
+          git commit -m "Update KenPom daily summary"
+          git push
