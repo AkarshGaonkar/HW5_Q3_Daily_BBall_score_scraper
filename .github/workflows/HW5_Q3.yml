@@ -1,9 +1,10 @@
 name: Daily KenPom Summary
 
 on:
+  workflow_dispatch:     # <--- allows manual trigger
   schedule:
-    # Runs every day at 17:00 UTC, which is 12:00 PM (noon) EST
-    - cron: '0 17 * * *' # minutes(0) hours(17) daily
+    - cron: '0 17 * * *' # scheduled run (daily at noon EST == 5pm UTC)
+
 
 jobs:
   build:
